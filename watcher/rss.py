@@ -1,6 +1,6 @@
 import feedparser
 import datetime
-from django.utils.timezone import timedelta
+
 
 def _replace_symbols_episode(episode_string: str) -> int:
     """
@@ -42,14 +42,11 @@ def parse_anilibria_rss(last_title_date=None, filter_last=False) -> (list, bool)
     """
     rss = feedparser.parse("https://dark-libria.it/rss.xml").entries
 
-    # Вот эта неведомая фигня -
     if last_title_date is not None:
         last_title_date = datetime.datetime.strftime(last_title_date, '%Y-%m-%d %H:%M:%S')
 
-    print(f"ltd: {str(last_title_date)} -> \nrss: {str(rss[0].published)} // {str(last_title_date) == str(rss[0].published)}")
-
-    if last_title_date == rss[0].published:
-        return False
+        if last_title_date == rss[0].published:
+            return False
 
     if filter_last:
         rss = _filter_last_anime(rss, last_title_date)

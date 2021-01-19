@@ -7,6 +7,5 @@ from .views import *
 
 urlpatterns = [
     path("auth/", obtain_jwt_token),
-    path("fill/", fill)
 
 ]
