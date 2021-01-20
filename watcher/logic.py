@@ -7,10 +7,13 @@ def update_anime_data() -> None:
     Поиск и обновление данных аниме с RSS канала Anilibria
     :return: None
     """
-    anime_data = parse_anilibria_rss(
-        last_title_date=AnimeDownloadLink.objects.all().order_by('-date_added')[0].date_added,
-        filter_last=True
-    )
+    try:
+        anime_data = parse_anilibria_rss(
+            last_title_date=AnimeDownloadLink.objects.all().order_by('-date_added')[0].date_added,
+            filter_last=True
+        )
+    except IndexError:
+        anime_data = parse_anilibria_rss()
 
     if anime_data:
         for anime in anime_data:

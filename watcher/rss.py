@@ -2,22 +2,18 @@ import feedparser
 import datetime
 
 
-def _replace_symbols_episode(episode_string: str) -> int:
+def _find_current_episode(dirty_str: str) -> int:
     """
-    Заменяет специальные символы в строке с количеством эпизодов на соотвествующее значение int
-    :param episode_string: Строка с количеством эпизодов
-    :return: Возвращает количество эпизодов в тайтле
+    Поиск текущего эпизода
+    :param dirty_str: Грязная строка с лишними данными, из которой надо вытянуть число
+    :return: Возвращает int с текущей серией
     """
+
     try:
-        if episode_string.find("∞") != -1:
-            return -1
-        elif episode_string.find("?") != -1:
-            return 0
-        else:
-            return int(episode_string)
-    except ValueError as err:
-        with open("log.log", 'a') as file:
-            file.write(f"replace err -> {err}")
+        return int(dirty_str.split('-')[1][0])
+    except IndexError:
+        # Если в тайтле вышла первая серия, то поиск разделением не получится
+        return int(dirty_str[dirty_str.find(":")+1:dirty_str.find("[")].replace(" ", ""))
 
 
 def _filter_last_anime(rss: list, last_title_date: str) -> list:
@@ -40,6 +36,7 @@ def parse_anilibria_rss(last_title_date=None, filter_last=False) -> (list, bool)
     :param filter_last: Проводить ли фильтрацию до последнего записанного тайтла, необходим last_title_date
     :return: Возвращает список последних в RSS тайтлов, либо False, если нет новых тайтлов
     """
+
     rss = feedparser.parse("https://dark-libria.it/rss.xml").entries
 
     if last_title_date is not None:
@@ -59,9 +56,8 @@ def parse_anilibria_rss(last_title_date=None, filter_last=False) -> (list, bool)
             "name": entry.title[0],
             "original_name": entry.title[-1],
             "description": entry.summary,
-            "episode_count": _replace_symbols_episode(
-                entry.categoy[entry.categoy.find("(") + 1:entry.categoy.find("эп")]),
-            "current_episode": int(entry.title[1].split('-')[1][0]),
+            "episode_count": entry.categoy[entry.categoy.find("(") + 1:entry.categoy.find("эп")].replace(" ", ""),
+            "current_episode": _find_current_episode(entry.title[1]),
             "darklibria_link": entry.link,
             "download_link": {
                 "type": entry.title[1][entry.title[1].find("[")+1:entry.title[1].find("]")],
