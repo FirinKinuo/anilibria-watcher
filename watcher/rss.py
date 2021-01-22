@@ -23,9 +23,22 @@ def _filter_last_anime(rss: list, last_title_date: str) -> list:
     :param last_title_date: Дата последнего тайтла
     :return: Отфильтрованный список RSS
     """
+
+    """
+    Немного пояснения за следующий костыль:
+    Каким то магическим образом, строка из RSS
+    Не является идентичной такой же строке из БД, поэтому последующий код не имел смысла и он тупо
+    Отправлял все, что было в RSS, от отделяя новое от старого, приведение к типу datetime
+    Позволило божественному Python понять, что даты то одинаковые, че дальше шакалиться
+    """
+
+    date_in_db = datetime.datetime.strptime(last_title_date, '%Y-%m-%d %H:%M:%S')
+
     for i, el in enumerate(rss):
-        if el.published == last_title_date:
+        date_in_rss = datetime.datetime.strptime(el.published, '%Y-%m-%d %H:%M:%S')
+        if date_in_rss == date_in_db:
             return rss[:i]
+        return rss
 
 
 def parse_anilibria_rss(last_title_date=None, filter_last=False) -> (list, bool):

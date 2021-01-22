@@ -1,6 +1,7 @@
 amqp==5.0.2
 asgiref==3.3.1
 billiard==3.6.3.0
+cached-property==1.5.2
 celery==5.0.5
 certifi==2020.12.5
 chardet==4.0.0
@@ -9,7 +10,10 @@ click-didyoumean==0.0.3
 click-plugins==1.1.1
 click-repl==0.1.6
 Django==3.1.5
+django-jsonfield==1.4.1
+django-model-utils==4.1.1
 django-rest-framework==0.1.0
+django-rq==2.4.0
 djangorestframework==3.12.2
 djangorestframework-jwt==1.11.0
 feedparser==6.0.2
@@ -18,10 +22,15 @@ kombu==5.0.2
 prompt-toolkit==3.0.10
 PyJWT==1.7.1
 pytz==2020.5
+redis==3.5.3
+requests==2.25.1
+rq==1.7.0
 sgmllib3k==1.0.0
 six==1.15.0
 soupsieve==2.1
 sqlparse==0.4.1
+standardjson==0.3.1
 urllib3==1.26.2
 vine==5.0.0
 wcwidth==0.2.5
+wrapt==1.12.1

@@ -1,5 +1,6 @@
 from .rss import parse_anilibria_rss
 from .models import *
+from webhooks import send_webhook
 
 
 def update_anime_data() -> None:
@@ -17,6 +18,7 @@ def update_anime_data() -> None:
 
     if anime_data:
         for anime in anime_data:
+            send_webhook(User.objects.get(username="fkinuo").webhooks_urls['link'], content=anime)
             Anime.objects.update_or_create(darklibria_link=anime["darklibria_link"], defaults={
                 "name": anime["name"],
                 "original_name": anime["original_name"],
@@ -42,5 +44,5 @@ def update_anime_data() -> None:
                     anime_id=Anime.objects.get(darklibria_link=anime["darklibria_link"]).id,
                     type=anime["download_link"]["type"],
                     link=anime["download_link"]["link"],
-                    date_added=anime["download_link"]["date_added"],
+                    date_added=f"{anime['download_link']['date_added']}+03:00",
                 )

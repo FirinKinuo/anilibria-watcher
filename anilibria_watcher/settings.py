@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'api.apps.ApiConfig',
     'watcher.apps.WatcherConfig',
 
-    'rest_framework'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -129,6 +130,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
+AUTH_USER_MODEL = "watcher.User"
 
 # celery
 CELERY_BROKER_URL = 'redis://localhost:6379'
