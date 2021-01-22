@@ -7,5 +7,6 @@ from .views import *
 
 urlpatterns = [
     path("auth/", obtain_jwt_token),
-
+    path("anime/", AllAnimeView.as_view()),
+    path("anime/<int:pk>", AnimeView.as_view())
 ]
