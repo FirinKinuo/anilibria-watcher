@@ -1,4 +1,5 @@
 import requests
+from .integrations import find_integrations_and_send
 
 
 def send_webhook(webhook_url: (str, list), content: dict) -> None:
@@ -9,7 +10,9 @@ def send_webhook(webhook_url: (str, list), content: dict) -> None:
     :return: None
     """
     if isinstance(webhook_url, str):
-        requests.post(webhook_url, data={'content': f'{content}'})
+        if not find_integrations_and_send(webhook_url, content):
+            requests.post(webhook_url, data={'content': f'{content}'})
     elif isinstance(webhook_url, list):
         for link in webhook_url:
-            requests.post(link, data={'content': f'{content}'})
+            if not find_integrations_and_send(link, content):
+                requests.post(link, data={'content': f'{content}'})
