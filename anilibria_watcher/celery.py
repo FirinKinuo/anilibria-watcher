@@ -11,7 +11,7 @@ celery_app.config_from_object('django.conf:settings', namespace='CELERY')
 celery_app.autodiscover_tasks()
 
 celery_app.conf.beat_schedule = {
-    'update-anime-db-every-three-minutes': {
+    'update-anime-db-every-minute': {
         'task': 'watcher.tasks.background_update_anime',
         'schedule': crontab(),
     },

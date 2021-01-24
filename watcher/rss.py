@@ -38,7 +38,7 @@ def _filter_last_anime(rss: list, last_title_date: str) -> list:
         date_in_rss = datetime.datetime.strptime(el.published, '%Y-%m-%d %H:%M:%S')
         if date_in_rss == date_in_db:
             return rss[:i]
-        return rss
+    return rss
 
 
 def parse_anilibria_rss(last_title_date=None, filter_last=False) -> (list, bool):
