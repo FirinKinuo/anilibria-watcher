@@ -44,5 +44,5 @@ def update_anime_data() -> None:
                     anime_id=Anime.objects.get(darklibria_link=anime["darklibria_link"]).id,
                     type=anime["download_link"]["type"],
                     link=anime["download_link"]["link"],
-                    date_added=f"{anime['download_link']['date_added']}+03:00",
+                    date_added=anime["download_link"]["date_added"],
                 )
