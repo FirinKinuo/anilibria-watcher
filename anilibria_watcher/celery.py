@@ -12,7 +12,7 @@ celery_app.autodiscover_tasks()
 
 celery_app.conf.beat_schedule = {
     'update-anime-db-every-minute': {
-        'task': 'watcher.tasks.background_update_anime',
+        'task': 'watcher.tasks.background_rss_anilibria',
         'schedule': crontab(),
     },
 }

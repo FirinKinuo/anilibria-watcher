@@ -54,7 +54,7 @@ class UserFavorite(models.Model):
     anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="Аниме")
 
     def __str__(self):
-        return f"{self.user_id} >> {self.anime_id}"
+        return f"{self.user} >> {self.anime}"
 
     class Meta:
         verbose_name = "Избранное"
