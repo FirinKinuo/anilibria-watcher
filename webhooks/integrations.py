@@ -1,8 +1,18 @@
-from dhooks import Webhook, Embed
+from dhooks import Embed, Webhook
 
 
-def _discord_integration(url: str, content: dict):
+def _discord_integration(url: str, content: dict) -> None:
+    """
+    Интеграция с вебхуками discord, отправляет информацию по новому тайтлу
+    по ссылке на вебхук
+    :param url: Ссылка на вебхук
+    :param content Информация по тайтлу:
+    :return: None
+    """
+
+    # TODO: Избавиться от dhooks, когда не будет лень
     hook = Webhook(url=url)
+
     embed = Embed(color=0x11f275)
     embed.add_field(name=f"{content['name']}",
                     value=f"{content['original_name']}\n"
@@ -19,12 +29,12 @@ def _discord_integration(url: str, content: dict):
     hook.send(embed=embed)
 
 
-def find_integrations_and_send(url: str, content=dict) -> bool:
+def find_integrations_and_send(url: str, content: dict) -> bool:
     """
-
-    :param str url:
-    :param dict content :
-    :return:
+    Ищет возможные интеграции с сервисами и отправляет удобный им вариант webhook
+    :param url: Ссылка на вебхук
+    :param content: Словарь с данными
+    :return: None
     """
     if url.find("https://discord.com/api/webhooks/") != -1:
         _discord_integration(url, content)
