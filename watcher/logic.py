@@ -50,7 +50,7 @@ def get_anime_data() -> [list, None]:
             filter_last=True
         )
 
-    except IndexError:
+    except AnimeDownloadLink.DoesNotExist:
         return parse_anilibria_rss()
 
 
