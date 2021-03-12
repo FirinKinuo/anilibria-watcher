@@ -1,59 +1,44 @@
-from .rss import parse_anilibria_rss
+from .api_requests import *
 from .models import *
 from webhooks import send_webhook
 
 
-def update_anime_models(anime_data: list) -> None:
+def add_anime_data(anime_data: list) -> None:
     """
-    Обновление моделей Anime и AnimeDownloadLink
-    :param anime_data: Словарь с данными
+    Обновление таблицы Anime
+    :param anime_data: Список с словарем данных
     :return: None
     """
+
     for anime in anime_data:
-        Anime.objects.update_or_create(darklibria_link=anime["darklibria_link"], defaults={
-            "name": anime["name"],
-            "original_name": anime["original_name"],
-            "description": anime["description"],
-            "episode_count": anime["episode_count"],
-            "current_episode": anime["current_episode"],
-            "darklibria_link": anime["darklibria_link"],
-        })
-
-        try:
-            AnimeDownloadLink.objects.update_or_create(
-                id=AnimeDownloadLink.objects.filter(
-                    anime_id=Anime.objects.get(darklibria_link=anime["darklibria_link"]).id,
-                    type=anime["download_link"]["type"]).get().id,
-                defaults={
-                    "anime_id": Anime.objects.get(darklibria_link=anime["darklibria_link"]).id,
-                    "type": anime["download_link"]["type"],
-                    "link": anime["download_link"]["link"],
-                    "date_added": anime["download_link"]["date_added"]
+        Anime.objects.update_or_create(
+            anilibria_id=anime["id"],
+            defaults={
+                "anilibria_id": anime["id"],
+                "original_name": anime["names"]["en"],
+                "updated_at": anime["updated"] if anime['updated'] is not None else anime['last_change']
                 })
-        except AnimeDownloadLink.DoesNotExist:
-            AnimeDownloadLink.objects.create(
-                anime_id=Anime.objects.get(darklibria_link=anime["darklibria_link"]).id,
-                type=anime["download_link"]["type"],
-                link=anime["download_link"]["link"],
-                date_added=anime["download_link"]["date_added"],
-            )
 
 
-def get_anime_data() -> [list, None]:
+def get_anime_data_from_api(arg_last_anime=0, arg_limit=5) -> list:
     """
-    Возвращает None или список с последними данными по аниме из RSS канала
-    :return: Возвращает list, если получены данные, иначе None
+    Возвращает список с обновлениями по тайтлам
+    :param int arg_last_anime: unix-time последнего тайтла
+    :param int arg_limit: кол-во выдачи тайтлов
+    :return list: Список с обновленными тайтлами
     """
     try:
-        return parse_anilibria_rss(
-            last_title_link=AnimeDownloadLink.objects.latest("link").link,
-            filter_last=True
+        return get_updates(
+            # +1 к updated_at, чтобы отсечь последний тайтл
+            last_anime_date=Anime.objects.latest('updated_at').updated_at+1 if arg_last_anime == 0 else arg_last_anime,
+            limit=arg_limit
         )
+    except Anime.DoesNotExist:
+        # Если БД пустая(обычно при первом запуске), то отправить запрос без фильтрации по последнему тайтлу
+        return get_updates()
 
-    except AnimeDownloadLink.DoesNotExist:
-        return parse_anilibria_rss()
 
-
+# TODO: обновить к новой модели
 def user_anime_filter(user: User, anime_data: list) -> list:
     """
     Возвращает список с отфильтрованными по избранному пользователя
@@ -65,7 +50,7 @@ def user_anime_filter(user: User, anime_data: list) -> list:
     if not favorites:
         return anime_data
 
-    return [anime for anime in anime_data for fav in favorites if anime['darklibria_link'] == fav.anime.darklibria_link]
+    return [anime for anime in anime_data for fav in favorites if anime['anilibria_id'] == fav.anime.anilibria_id]
 
 
 def send_webhooks_to_users(anime_data: list) -> None:

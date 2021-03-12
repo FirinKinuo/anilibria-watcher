@@ -36,6 +36,10 @@ def find_integrations_and_send(url: str, content: dict) -> bool:
     :param content: Словарь с данными
     :return: None
     """
+    # TODO: Переделать интеграции под новую структуру БД
+    # Заглушка пока я не переделаю под новую структуру
+    return False
+
     if url.find("https://discord.com/api/webhooks/") != -1:
         _discord_integration(url, content)
         return True

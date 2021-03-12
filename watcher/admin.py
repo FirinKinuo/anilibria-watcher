@@ -4,5 +4,4 @@ from .models import *
 
 admin.site.register(Anime)
 admin.site.register(User)
-admin.site.register(AnimeDownloadLink)
 admin.site.register(UserFavorite)
