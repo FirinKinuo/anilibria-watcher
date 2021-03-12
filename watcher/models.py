@@ -18,7 +18,7 @@ class Anime(models.Model):
     class Meta:
         verbose_name = "Тайтл"
         verbose_name_plural = "Аниме"
-        ordering = ["anilibria_id"]
+        ordering = ["-anilibria_id"]
 
 
 class UserFavorite(models.Model):
