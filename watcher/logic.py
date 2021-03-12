@@ -38,7 +38,6 @@ def get_anime_data_from_api(arg_last_anime=0, arg_limit=5) -> list:
         return get_updates()
 
 
-# TODO: обновить к новой модели
 def user_anime_filter(user: User, anime_data: list) -> list:
     """
     Возвращает список с отфильтрованными по избранному пользователя
