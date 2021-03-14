@@ -2,7 +2,7 @@ from api.logic.decorators import *
 
 
 @check_access_to_request_account
-def return_user_favorites(model_mixin, request, *args, **kwargs) -> Response:
+def response_user_favorites(model_mixin, request, *args, **kwargs) -> Response:
     """
     Возвращает информацию об избранном пользователя
     """
@@ -11,7 +11,7 @@ def return_user_favorites(model_mixin, request, *args, **kwargs) -> Response:
 
 
 @check_access_to_request_account
-def return_user_data(model_mixin, request, *args, **kwargs) -> Response:
+def response_user_data(model_mixin, request, *args, **kwargs) -> Response:
     """
     Возвращает информацию о пользователе
     """

@@ -16,7 +16,7 @@ class UserFavoriteListView(ListAPIView):
 
     # GET запрос на получение данные об избранном пользователя
     def get(self, request, *args, **kwargs):
-        return return_user_favorites(self, request, *args, **kwargs)
+        return response_user_favorites(self, request, *args, **kwargs)
 
 
 class UserDataView(RetrieveAPIView):
@@ -25,9 +25,9 @@ class UserDataView(RetrieveAPIView):
     """
     serializer_class = UserSerializer
     queryset = models.User
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     # GET запрос на получение данные о пользователе
     def get(self, request, *args, **kwargs):
-        return return_user_data(self, request, *args, **kwargs)
+        return response_user_data(self, request, *args, **kwargs)
 
