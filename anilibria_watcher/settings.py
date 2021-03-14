@@ -30,19 +30,30 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
+PROJECT_APPS = [
     'api.apps.ApiConfig',
     'watcher.apps.WatcherConfig',
+]
 
+ANOTHER_APPS = [
     'rest_framework',
 ]
+
+INSTALLED_APPS = []
+
+INSTALLED_APPS += DJANGO_APPS + \
+                  PROJECT_APPS + \
+                  ANOTHER_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,6 +140,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+}
+
+JWT_AUTH = {
+    'JWT_AUTH_COOKIE': 'jwt_auth_cookie',
 }
 
 AUTH_USER_MODEL = "watcher.User"
