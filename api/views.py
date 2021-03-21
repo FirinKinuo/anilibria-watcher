@@ -19,6 +19,14 @@ class UserFavoriteListView(ListAPIView):
         return response_user_favorites(self, request, *args, **kwargs)
 
 
+class UserDataFromCookie(RetrieveAPIView):
+    serializer_class = UserSerializer
+    queryset = models.User
+
+    def get(self, request, *args, **kwargs):
+        return response_user_data_from_cookie(self, request, *args, **kwargs)
+
+
 class UserDataView(RetrieveAPIView):
     """
     Контроллер, отвечающий за взаимодействие с моделью User

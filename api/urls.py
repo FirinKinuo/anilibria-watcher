@@ -8,6 +8,7 @@ from .views import *
 urlpatterns = [
     path("auth/", obtain_jwt_token),
     path("auth/verify/", verify_jwt_token),
+    path("user/", UserDataFromCookie.as_view()),
     path("user/<int:pk>/", UserDataView.as_view()),
     path("user/<int:pk>/favorites/", UserFavoriteListView.as_view())
 ]
